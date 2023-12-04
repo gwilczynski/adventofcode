@@ -12,12 +12,14 @@ func Test_Decode(t *testing.T) {
 		result int
 	}{
 		{
-			name: "example",
-			value: "1abc2\n" +
-				"pqr3stu8vwx\n" +
-				"a1b2c3d4e5f\n" +
-				"treb7uchet",
+			name:   "example",
+			value:  "1abc2\npqr3stu8vwx\na1b2c3d4e5f\ntreb7uchet",
 			result: 142,
+		},
+		{
+			name:   "spelled out with letters",
+			value:  "two1nine\neightwothree\nabcone2threexyz\nxtwone3four\n4nineeightseven2\nzoneight234\n7pqrstsixteen",
+			result: 281,
 		},
 	}
 	for _, tt := range tests {
@@ -189,6 +191,32 @@ func Test_number(t *testing.T) {
 			}
 			if got != tt.want {
 				t.Errorf("number() got = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_decode(t *testing.T) {
+	tests := []struct {
+		name   string
+		number string
+		want   string
+	}{
+		{
+			name:   "one",
+			number: "one",
+			want:   "1",
+		},
+		{
+			name:   "1",
+			number: "1",
+			want:   "1",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := decode(tt.number); got != tt.want {
+				t.Errorf("decode() = %v, want %v", got, tt.want)
 			}
 		})
 	}
