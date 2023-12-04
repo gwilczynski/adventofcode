@@ -91,6 +91,48 @@ func Test_calibration(t *testing.T) {
 			first: "3",
 			last:  "7",
 		},
+		{
+			name:  "two1nine",
+			line:  "two1nine",
+			first: "two",
+			last:  "nine",
+		},
+		{
+			name:  "eightwothree",
+			line:  "eightwothree",
+			first: "eight",
+			last:  "three",
+		},
+		{
+			name:  "abcone2threexyz",
+			line:  "abcone2threexyz",
+			first: "one",
+			last:  "three",
+		},
+		{
+			name:  "xtwone3four",
+			line:  "xtwone3four",
+			first: "two",
+			last:  "four",
+		},
+		{
+			name:  "4nineeightseven2",
+			line:  "4nineeightseven2",
+			first: "4",
+			last:  "2",
+		},
+		{
+			name:  "zoneight234",
+			line:  "zoneight234",
+			first: "one",
+			last:  "4",
+		},
+		{
+			name:  "7pqrstsixteen",
+			line:  "7pqrstsixteen",
+			first: "7",
+			last:  "six",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

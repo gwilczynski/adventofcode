@@ -24,7 +24,7 @@ func split(doc string) []string {
 }
 
 func calibration(line string) (first string, last string) {
-	r := regexp.MustCompile("[0-9]")
+	r := regexp.MustCompile("[0-9]|one|two|three|four|five|six|seven|eight|nine")
 	numbers := r.FindAllString(line, -1)
 
 	first = numbers[0]
