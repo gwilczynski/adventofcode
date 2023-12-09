@@ -6,12 +6,12 @@ import (
 	"strings"
 )
 
-type Color uint
+type Color string
 
 const (
-	Red Color = iota
-	Green
-	Blue
+	Red   Color = "Red"
+	Green Color = "Green"
+	Blue  Color = "Blue"
 )
 
 func (s Color) String() string {
@@ -26,7 +26,7 @@ func (s Color) String() string {
 	return "unknown"
 }
 
-func FromString(color string) Color {
+func ColorFromString(color string) Color {
 	switch color {
 	case "red":
 		return Red
@@ -35,7 +35,7 @@ func FromString(color string) Color {
 	case "blue":
 		return Blue
 	default:
-		return Color(0)
+		return Color("")
 	}
 }
 
@@ -48,9 +48,40 @@ type (
 	}
 )
 
-func WhichGamesPossible(doc string, bag Bag) int {
-	var accumulator int
+func FewestNumberMultiplied(doc string) (acc int) {
+	lines := split(doc)
+	games := parse(lines)
+	for _, game := range games {
+		acc += fewest(game)
+	}
 
+	return
+}
+
+func fewest(game Game) int {
+	f := 1
+	colours := []Color{Green, Blue, Red}
+	for _, colour := range colours {
+		acc := 0
+		for _, set := range game.sets {
+			acc = maximum(acc, set[colour])
+		}
+
+		f *= acc
+	}
+
+	return f
+}
+
+func maximum(acc, value int) int {
+	if acc < value {
+		return value
+	}
+
+	return acc
+}
+
+func WhichGamesPossible(doc string, bag Bag) (accumulator int) {
 	lines := split(doc)
 	games := parse(lines)
 	for _, game := range games {
@@ -59,7 +90,7 @@ func WhichGamesPossible(doc string, bag Bag) int {
 		}
 	}
 
-	return accumulator
+	return
 }
 
 func isPossible(game Game, bag Bag) (possible bool) {
@@ -120,7 +151,7 @@ func parseSet(s string) (color Color, number int) {
 	matches := re.FindStringSubmatch(s)
 
 	number, _ = strconv.Atoi(matches[1])
-	color = FromString(matches[2])
+	color = ColorFromString(matches[2])
 
 	return
 }

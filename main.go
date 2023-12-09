@@ -26,4 +26,5 @@ func goCubeConundrum() {
 		cubeconundrum.Blue:  14,
 	}
 	fmt.Println(cubeconundrum.WhichGamesPossible(input, bag))
+	fmt.Println(cubeconundrum.FewestNumberMultiplied(input))
 }

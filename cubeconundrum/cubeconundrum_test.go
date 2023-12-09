@@ -473,3 +473,178 @@ func TestWhichGamesPossible(t *testing.T) {
 		})
 	}
 }
+
+func Test_maximum(t *testing.T) {
+	tests := []struct {
+		name  string
+		acc   int
+		value int
+		want  int
+	}{
+		{
+			name:  "first",
+			acc:   1,
+			value: 2,
+			want:  2,
+		},
+		{
+			name:  "second",
+			acc:   3,
+			value: 2,
+			want:  3,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := maximum(tt.acc, tt.value); got != tt.want {
+				t.Errorf("lowestNumber() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_fewest(t *testing.T) {
+	tests := []struct {
+		name string
+		game Game
+		bag  Bag
+		want int
+	}{
+		{
+			name: "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green",
+			game: Game{
+				id: 1,
+				sets: []Set{
+					{
+						Blue: 3,
+						Red:  4,
+					},
+					{
+						Red:   1,
+						Green: 2,
+						Blue:  6,
+					},
+					{
+						Green: 2,
+					},
+				},
+			},
+			want: 48,
+		},
+		{
+			name: "Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue",
+			game: Game{
+				id: 2,
+				sets: []Set{
+					{
+						Blue:  1,
+						Green: 2,
+					},
+					{
+						Green: 3,
+						Blue:  4,
+						Red:   1,
+					},
+					{
+						Green: 1,
+						Blue:  1,
+					},
+				},
+			},
+			want: 12,
+		},
+		{
+			name: "Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red",
+			game: Game{
+				id: 3,
+				sets: []Set{
+					{
+						Green: 8,
+						Blue:  6,
+						Red:   20,
+					},
+					{
+						Blue:  5,
+						Red:   4,
+						Green: 13,
+					},
+					{
+						Green: 5,
+						Red:   1,
+					},
+				},
+			},
+			want: 1560,
+		},
+		{
+			name: "Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red",
+			game: Game{
+				id: 4,
+				sets: []Set{
+					{
+						Green: 1,
+						Red:   3,
+						Blue:  6,
+					},
+					{
+						Green: 3,
+						Red:   6,
+					},
+					{
+						Green: 3,
+						Blue:  15,
+						Red:   14,
+					},
+				},
+			},
+			want: 630,
+		},
+		{
+			name: "Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green",
+			game: Game{
+				id: 5,
+				sets: []Set{
+					{
+						Red:   6,
+						Blue:  1,
+						Green: 3,
+					},
+					{
+						Blue:  2,
+						Red:   1,
+						Green: 2,
+					},
+				},
+			},
+			want: 36,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if gotAcc := fewest(tt.game); gotAcc != tt.want {
+				t.Errorf("fewest() = %v, want %v", gotAcc, tt.want)
+			}
+		})
+	}
+}
+
+func TestFewestNumberMultiplied(t *testing.T) {
+	tests := []struct {
+		name string
+		doc  string
+		want int
+	}{
+		{
+			name: "game",
+			want: 2286,
+			doc:  "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green\nGame 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue\nGame 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red\nGame 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red\nGame 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if gotAcc := FewestNumberMultiplied(tt.doc); gotAcc != tt.want {
+				t.Errorf("FewestNumberMultiplied() = %v, want %v", gotAcc, tt.want)
+			}
+		})
+	}
+}
