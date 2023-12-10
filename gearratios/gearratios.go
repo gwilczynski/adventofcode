@@ -13,27 +13,31 @@ func GetPartNumbers(data []string) int {
 		scanItems(i, datum, &numbers, &specials)
 	}
 
-	return 4361
-}
-
-func findIndexedAround(number NumberItem) map[int][]int {
-	coordinates := map[int][]int{}
-
-	for i := 0; i < 3; i++ {
-		var indexes []int
-
-		indexes = append(indexes, number.startIndex-1)
-		for j := number.startIndex; j <= number.endIndex; j++ {
-			indexes = append(indexes, j)
+	var acc int
+	for _, number := range numbers {
+		if isPartNumber(number, specials) {
+			acc += number.value
 		}
-		indexes = append(indexes, number.endIndex+1)
-
-		coordinates[number.line-1] = indexes
-		coordinates[number.line] = indexes
-		coordinates[number.line+1] = indexes
 	}
 
-	return coordinates
+	return acc
+}
+
+func isPartNumber(number NumberItem, specials []SpecialItem) bool {
+	for _, special := range specials {
+		if isSpecialAdjacentOrOverlapping(special, number) {
+			return true
+		}
+	}
+	return false
+}
+
+func isSpecialAdjacentOrOverlapping(special SpecialItem, number NumberItem) bool {
+	if special.line < number.line-1 || special.line > number.line+1 {
+		return false
+	}
+
+	return special.startIndex >= number.startIndex-1 && special.startIndex <= number.endIndex+1
 }
 
 func scanItems(index int, line string, numbers *[]NumberItem, specials *[]SpecialItem) {
