@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 
+	"adventofcode/gearratios"
+
 	"adventofcode/cubeconundrum"
 	"adventofcode/trebuchet"
 )
@@ -35,7 +37,7 @@ func goCubeConundrum() {
 func goGearRatios() {
 	input, _ := getDataSet("./gearratios/data.txt")
 
-	fmt.Println(input)
+	fmt.Println(gearratios.GetPartNumbers(input))
 }
 
 func getDataSet(path string) (lines []string, err error) {
