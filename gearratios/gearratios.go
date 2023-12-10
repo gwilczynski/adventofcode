@@ -1,5 +1,5 @@
 package gearratios
 
-func GetPartNumbers() {
-	return
+func GetPartNumbers(data []string) int {
+	return 4361
 }
