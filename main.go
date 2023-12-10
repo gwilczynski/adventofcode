@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 
 	"adventofcode/cubeconundrum"
 	"adventofcode/trebuchet"
@@ -10,6 +12,7 @@ import (
 func main() {
 	goTrebuchet()
 	goCubeConundrum()
+	goGearRatios()
 }
 
 func goTrebuchet() {
@@ -27,4 +30,29 @@ func goCubeConundrum() {
 	}
 	fmt.Println(cubeconundrum.WhichGamesPossible(input, bag))
 	fmt.Println(cubeconundrum.FewestNumberMultiplied(input))
+}
+
+func goGearRatios() {
+	input, _ := getDataSet("./gearratios/data.txt")
+
+	fmt.Println(input)
+}
+
+func getDataSet(path string) (lines []string, err error) {
+	dataFile, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer dataFile.Close()
+
+	scanner := bufio.NewScanner(dataFile)
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+
+	if err := scanner.Err(); err != nil {
+		return nil, err
+	}
+
+	return lines, nil
 }
