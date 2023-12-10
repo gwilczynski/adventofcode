@@ -1,6 +1,7 @@
 package gearratios
 
 import (
+	"reflect"
 	"testing"
 )
 
@@ -141,6 +142,42 @@ func Test_scanItems1(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			scanItems(tt.index, tt.line, tt.numbers, tt.specials)
+		})
+	}
+}
+
+func Test_findIndexedAround(t *testing.T) {
+	tests := []struct {
+		name   string
+		number NumberItem
+		want   map[int][]int
+	}{
+		{
+			name: "one",
+			number: NumberItem{
+				line:       0,
+				startIndex: 0,
+				endIndex:   2,
+				value:      467,
+			},
+			want: map[int][]int{
+				-1: {
+					-1, 0, 1, 2, 3,
+				},
+				0: {
+					-1, 0, 1, 2, 3,
+				},
+				1: {
+					-1, 0, 1, 2, 3,
+				},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := findIndexedAround(tt.number); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("findIndexedAround() = %v, want %v", got, tt.want)
+			}
 		})
 	}
 }

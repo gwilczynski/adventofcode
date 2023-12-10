@@ -16,6 +16,26 @@ func GetPartNumbers(data []string) int {
 	return 4361
 }
 
+func findIndexedAround(number NumberItem) map[int][]int {
+	coordinates := map[int][]int{}
+
+	for i := 0; i < 3; i++ {
+		var indexes []int
+
+		indexes = append(indexes, number.startIndex-1)
+		for j := number.startIndex; j <= number.endIndex; j++ {
+			indexes = append(indexes, j)
+		}
+		indexes = append(indexes, number.endIndex+1)
+
+		coordinates[number.line-1] = indexes
+		coordinates[number.line] = indexes
+		coordinates[number.line+1] = indexes
+	}
+
+	return coordinates
+}
+
 func scanItems(index int, line string, numbers *[]NumberItem, specials *[]SpecialItem) {
 	pattern := `(\d+|[^\d.])`
 	re := regexp.MustCompile(pattern)
@@ -42,7 +62,6 @@ func scanItems(index int, line string, numbers *[]NumberItem, specials *[]Specia
 				value:      valueAsString,
 			})
 		}
-
 	}
 }
 
