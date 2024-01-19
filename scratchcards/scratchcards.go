@@ -15,7 +15,7 @@ func GetWorthPoints(data []string) int {
 	cards := make([]Card, 0, len(data))
 	for _, line := range data {
 		card, _ := GetCard(line)
-		cards = append(cards, *card)
+		cards = append(cards, card)
 	}
 
 	for _, card := range cards {
@@ -31,16 +31,22 @@ func CollectPoints(card *Card) int {
 		return lo.Contains(card.winningNumbers, x)
 	})
 
-	return len(matchingNumbers) ^ 2
+	if len(matchingNumbers) == 0 {
+		return 0
+	}
+
+	acc := 1 << (len(matchingNumbers) - 1)
+
+	return acc
 }
 
-func GetCard(data string) (*Card, error) {
-	pattern := `Card (\d+): ([\d\s]+)\| ([\d\s]+)`
+func GetCard(data string) (Card, error) {
+	pattern := `Card ([\d\s]+): ([\d\s]+)\| ([\d\s]+)`
 	re := regexp.MustCompile(pattern)
 
 	matches := re.FindStringSubmatch(data)
 	if len(matches) < 4 {
-		return nil, errors.New("no match found")
+		return Card{}, errors.New("no match found")
 	}
 
 	cardNumber := matches[1]
@@ -50,7 +56,7 @@ func GetCard(data string) (*Card, error) {
 	winningNumbers := convertStringToIntSlice(winningNumbersStr)
 	numbersYouHave := convertStringToIntSlice(numbersYouHaveStr)
 
-	return &Card{
+	return Card{
 		number:         cardNumber,
 		winningNumbers: winningNumbers,
 		numbersYouHave: numbersYouHave,

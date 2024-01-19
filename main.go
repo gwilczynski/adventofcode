@@ -14,14 +14,14 @@ import (
 )
 
 func main() {
-	// goTrebuchet()
-	// goCubeConundrum()
-	// goGearRatios()
+	goTrebuchet()
+	goCubeConundrum()
+	goGearRatios()
 	getWorthPoints()
 }
 
 func getWorthPoints() {
-	input, _ := getDataSet("./scratchcards/data_test.txt")
+	input, _ := getDataSet("./scratchcards/data.txt")
 	fmt.Println(scratchcards.GetWorthPoints(input))
 }
 
