@@ -37,21 +37,30 @@ func TestGetCard(t *testing.T) {
 	tests := []struct {
 		name string
 		data string
-		want Card
+		want *Card
 	}{
 		{
 			name: "ok",
 			data: "Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53",
-			want: Card{
+			want: &Card{
 				number:         "1",
 				winningNumbers: []int{41, 48, 83, 86, 17},
 				numbersYouHave: []int{83, 86, 6, 31, 17, 9, 48, 53},
 			},
 		},
+		{
+			name: "ok",
+			data: "Card 219: 58 38 53 49 11 10 14  3 89  2 |  8 16 54 18 44 95 31 15 46 45 73 40 61 28 98  5 70 63 69 26 34 80 12 42 90",
+			want: &Card{
+				number:         "219",
+				winningNumbers: []int{58, 38, 53, 49, 11, 10, 14, 3, 89, 2},
+				numbersYouHave: []int{8, 16, 54, 18, 44, 95, 31, 15, 46, 45, 73, 40, 61, 28, 98, 5, 70, 63, 69, 26, 34, 80, 12, 42, 90},
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := GetCard(tt.data); !reflect.DeepEqual(got, tt.want) {
+			if got, _ := GetCard(tt.data); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("GetCard() = %v, want %v", got, tt.want)
 			}
 		})
