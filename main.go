@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 
+	"adventofcode/scratchcards"
+
 	"adventofcode/gearratios"
 
 	"adventofcode/cubeconundrum"
@@ -12,9 +14,15 @@ import (
 )
 
 func main() {
-	goTrebuchet()
-	goCubeConundrum()
-	goGearRatios()
+	// goTrebuchet()
+	// goCubeConundrum()
+	// goGearRatios()
+	getWorthPoints()
+}
+
+func getWorthPoints() {
+	input, _ := getDataSet("./scratchcards/data_test.txt")
+	fmt.Println(scratchcards.GetWorthPoints(input))
 }
 
 func goTrebuchet() {

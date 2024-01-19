@@ -5,11 +5,33 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/samber/lo"
 )
 
 // GetWorthPoints returns How many points they are worth in total?
 func GetWorthPoints(data []string) int {
-	return 0
+	var acc int
+	cards := make([]Card, 0, len(data))
+	for _, line := range data {
+		card, _ := GetCard(line)
+		cards = append(cards, *card)
+	}
+
+	for _, card := range cards {
+		points := CollectPoints(&card)
+		acc += points
+	}
+
+	return acc
+}
+
+func CollectPoints(card *Card) int {
+	matchingNumbers := lo.Filter(card.numbersYouHave, func(x int, _ int) bool {
+		return lo.Contains(card.winningNumbers, x)
+	})
+
+	return len(matchingNumbers) ^ 2
 }
 
 func GetCard(data string) (*Card, error) {
