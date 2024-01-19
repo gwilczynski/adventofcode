@@ -144,3 +144,35 @@ func Test_scanItems1(t *testing.T) {
 		})
 	}
 }
+
+func TestGetGearRatiosSum(t *testing.T) {
+	tests := []struct {
+		name string
+		data []string
+		want int
+	}{
+		{
+			name: "ok",
+			data: []string{
+				"467..114..",
+				"...*......",
+				"..35..633.",
+				"......#...",
+				"617*......",
+				".....+.58.",
+				"..592.....",
+				"......755.",
+				"...$.*....",
+				".664.598..",
+			},
+			want: 467835,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := GetGearRatiosSum(tt.data); got != tt.want {
+				t.Errorf("GetGearRatiosSum() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

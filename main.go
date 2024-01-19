@@ -38,6 +38,7 @@ func goGearRatios() {
 	input, _ := getDataSet("./gearratios/data.txt")
 
 	fmt.Println(gearratios.GetPartNumbers(input))
+	fmt.Println(gearratios.GetGearRatiosSum(input))
 }
 
 func getDataSet(path string) (lines []string, err error) {
