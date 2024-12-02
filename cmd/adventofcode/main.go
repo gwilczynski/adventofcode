@@ -14,6 +14,12 @@ func main() {
 
 func redNosedReport() {
 	fmt.Println("--- Day 2: Red-Nosed Reports ---")
+	data, err := reader.ReadData("./data/red_nosed_reports.txt")
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("data: ", data)
 }
 
 func historianHysteria() {
