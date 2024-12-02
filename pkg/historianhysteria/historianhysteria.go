@@ -2,6 +2,7 @@ package historianhysteria
 
 import (
 	"fmt"
+	"math"
 	"slices"
 	"strconv"
 	"strings"
@@ -46,4 +47,16 @@ func SortLists(lists [][]int) [][]int {
 	}
 
 	return lists
+}
+
+func GetDistances(lists [][]int) []int {
+	buff := make([]int, len(lists[0]))
+
+	for _, list := range lists {
+		for i := 0; i < len(list); i++ {
+			buff[i] = int(math.Abs(float64(buff[i] - list[i])))
+		}
+	}
+
+	return buff
 }

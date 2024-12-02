@@ -90,3 +90,30 @@ func TestSortLists(t *testing.T) {
 		})
 	}
 }
+
+func TestGetDistances(t *testing.T) {
+	type args struct {
+		lists [][]int
+	}
+	tests := []struct {
+		name string
+		args args
+		want []int
+	}{
+		{
+			name: "ok",
+			args: args{
+				lists: [][]int{{1, 2, 3, 3, 3, 4}, {3, 3, 3, 4, 5, 9}},
+			},
+			want: []int{2, 1, 0, 1, 2, 5},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if gotR := historianhysteria.GetDistances(tt.args.lists); !reflect.DeepEqual(gotR, tt.want) {
+				t.Errorf("GetDistances() = %v, want %v", gotR, tt.want)
+			}
+		})
+	}
+}
