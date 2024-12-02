@@ -23,6 +23,9 @@ func redNosedReport() {
 
 	safeReports := rednosedreport.HowManyReportsAreSafe(data)
 	fmt.Println("safe reports: ", safeReports)
+
+	safeReportsWithProblemDampener := rednosedreport.HowManyReportsAreSafeWithProblemDampener(data)
+	fmt.Println("safe reports with problem dampener: ", safeReportsWithProblemDampener)
 }
 
 func historianHysteria() {

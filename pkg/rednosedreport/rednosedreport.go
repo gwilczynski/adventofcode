@@ -19,6 +19,20 @@ func HowManyReportsAreSafe(data []string) int {
 	return safe
 }
 
+func HowManyReportsAreSafeWithProblemDampener(data []string) int {
+	var safe int
+
+	for _, line := range data {
+		split := Split(line)
+
+		if Safe(split) {
+			safe++
+		}
+	}
+
+	return safe
+}
+
 func Safe(data []int) bool {
 	increasing := 1
 	decreasing := 1
