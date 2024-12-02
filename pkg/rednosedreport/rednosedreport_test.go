@@ -129,3 +129,65 @@ func TestSafe(t *testing.T) {
 		})
 	}
 }
+
+func TestSafeWithProblemDampener(t *testing.T) {
+	type args struct {
+		data []int
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{
+			name: "safe without removing any level",
+			args: args{
+				data: []int{7, 6, 4, 2, 1},
+			},
+			want: true,
+		},
+		{
+			name: "unsafe regardless of which level is removed",
+			args: args{
+				data: []int{1, 2, 7, 8, 9},
+			},
+			want: false,
+		},
+		{
+			name: "unsafe regardless of which level is removed",
+			args: args{
+				data: []int{9, 7, 6, 2, 1},
+			},
+			want: false,
+		},
+		{
+			name: "safe by removing the second level, 3",
+			args: args{
+				data: []int{1, 3, 2, 4, 5},
+			},
+			want: true,
+		},
+		{
+			name: "safe by removing the second level, 4",
+			args: args{
+				data: []int{8, 6, 4, 4, 1},
+			},
+			want: true,
+		},
+		{
+			name: "safe without removing any level",
+			args: args{
+				data: []int{1, 3, 6, 7, 9},
+			},
+			want: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := rednosedreport.SafeWithProblemDampener(tt.args.data); got != tt.want {
+				t.Errorf("HowManyReportsAreSafeWithProblemDampener() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

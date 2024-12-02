@@ -25,12 +25,26 @@ func HowManyReportsAreSafeWithProblemDampener(data []string) int {
 	for _, line := range data {
 		split := Split(line)
 
-		if Safe(split) {
+		if Safe(split) || SafeWithProblemDampener(split) {
 			safe++
 		}
 	}
 
 	return safe
+}
+
+func SafeWithProblemDampener(data []int) bool {
+	for i := 0; i < len(data); i++ {
+		slice := make([]int, 0, len(data)-1)
+		slice = append(slice, data[:i]...)
+		slice = append(slice, data[i+1:]...)
+
+		if Safe(slice) {
+			return true
+		}
+	}
+
+	return false
 }
 
 func Safe(data []int) bool {
