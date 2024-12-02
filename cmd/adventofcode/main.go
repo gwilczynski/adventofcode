@@ -15,4 +15,7 @@ func main() {
 
 	totalDistance := historianhysteria.TotalDistance(data)
 	fmt.Println("total distance:", totalDistance)
+
+	similarityScore := historianhysteria.SimilarityScore(data)
+	fmt.Println("similarity score:", similarityScore)
 }
