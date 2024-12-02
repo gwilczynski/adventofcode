@@ -63,3 +63,30 @@ func TestSplitLines(t *testing.T) {
 		})
 	}
 }
+
+func TestSortLists(t *testing.T) {
+	type args struct {
+		lists [][]int
+	}
+	tests := []struct {
+		name string
+		args args
+		want [][]int
+	}{
+		{
+			name: "ok",
+			args: args{
+				lists: [][]int{{3, 4, 2, 1, 3, 3}, {4, 3, 5, 3, 9, 3}},
+			},
+			want: [][]int{{1, 2, 3, 3, 3, 4}, {3, 3, 3, 4, 5, 9}},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := historianhysteria.SortLists(tt.args.lists); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SortLists() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
