@@ -1,3 +1,5 @@
+[![Go](https://github.com/gwilczynski/adventofcode/actions/workflows/go.yml/badge.svg?branch=main)](https://github.com/gwilczynski/adventofcode/actions/workflows/go.yml)
+
 # Advent of Code 2024 🎄
 
 Welcome to my **Advent of Code 2024** repository!
