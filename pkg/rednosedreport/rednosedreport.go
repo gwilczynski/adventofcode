@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func HowManyReportsAreSafe(data []string) int {
+func HowManyReportsAreSafe(data []string, problemDampener bool) int {
 	var safe int
 
 	for _, line := range data {
@@ -13,19 +13,7 @@ func HowManyReportsAreSafe(data []string) int {
 
 		if Safe(split) {
 			safe++
-		}
-	}
-
-	return safe
-}
-
-func HowManyReportsAreSafeWithProblemDampener(data []string) int {
-	var safe int
-
-	for _, line := range data {
-		split := Split(line)
-
-		if Safe(split) || SafeWithProblemDampener(split) {
+		} else if problemDampener && SafeWithProblemDampener(split) {
 			safe++
 		}
 	}

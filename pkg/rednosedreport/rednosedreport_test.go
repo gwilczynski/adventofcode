@@ -9,7 +9,8 @@ import (
 
 func TestHowManyReportsAreSafe(t *testing.T) {
 	type args struct {
-		data []string
+		data            []string
+		problemDampener bool
 	}
 	tests := []struct {
 		name string
@@ -19,15 +20,24 @@ func TestHowManyReportsAreSafe(t *testing.T) {
 		{
 			name: "ok",
 			args: args{
-				data: []string{"7 6 4 2 1", "1 2 7 8 9", "9 7 6 2 1", "1 3 2 4 5", "8 6 4 4 1", "1 3 6 7 9"},
+				problemDampener: false,
+				data:            []string{"7 6 4 2 1", "1 2 7 8 9", "9 7 6 2 1", "1 3 2 4 5", "8 6 4 4 1", "1 3 6 7 9"},
 			},
 			want: 2,
+		},
+		{
+			name: "with problem dampener",
+			args: args{
+				problemDampener: true,
+				data:            []string{"7 6 4 2 1", "1 2 7 8 9", "9 7 6 2 1", "1 3 2 4 5", "8 6 4 4 1", "1 3 6 7 9"},
+			},
+			want: 4,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := rednosedreport.HowManyReportsAreSafe(tt.args.data); got != tt.want {
+			if got := rednosedreport.HowManyReportsAreSafe(tt.args.data, tt.args.problemDampener); got != tt.want {
 				t.Errorf("Safe() = %v, want %v", got, tt.want)
 			}
 		})

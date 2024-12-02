@@ -21,10 +21,10 @@ func redNosedReport() {
 		panic(err)
 	}
 
-	safeReports := rednosedreport.HowManyReportsAreSafe(data)
+	safeReports := rednosedreport.HowManyReportsAreSafe(data, false)
 	fmt.Println("safe reports: ", safeReports)
 
-	safeReportsWithProblemDampener := rednosedreport.HowManyReportsAreSafeWithProblemDampener(data)
+	safeReportsWithProblemDampener := rednosedreport.HowManyReportsAreSafe(data, true)
 	fmt.Println("safe reports with problem dampener: ", safeReportsWithProblemDampener)
 }
 
