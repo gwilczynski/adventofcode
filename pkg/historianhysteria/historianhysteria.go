@@ -1,5 +1,5 @@
 package historianhysteria
 
-func Name() string {
-	return "Historian Hysteria"
+func TotalDistance(data []string) int {
+	return 0
 }
