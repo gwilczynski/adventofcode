@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 
+	"github.com/gwilczynski/adventofcode/pkg/rednosedreport"
+
 	"github.com/gwilczynski/adventofcode/pkg/historianhysteria"
 	"github.com/gwilczynski/adventofcode/pkg/reader"
 )
@@ -19,7 +21,8 @@ func redNosedReport() {
 		panic(err)
 	}
 
-	fmt.Println("data: ", data)
+	safeReports := rednosedreport.HowManyReportsAreSafe(data)
+	fmt.Println("safe reports: ", safeReports)
 }
 
 func historianHysteria() {
