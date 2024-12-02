@@ -8,7 +8,17 @@ import (
 )
 
 func main() {
-	data, err := reader.ReadData("./data/historianhysteria.txt")
+	historianHysteria()
+	redNosedReport()
+}
+
+func redNosedReport() {
+	fmt.Println("--- Day 2: Red-Nosed Reports ---")
+}
+
+func historianHysteria() {
+	fmt.Println("--- Day 1: Historian Hysteria ---")
+	data, err := reader.ReadData("./data/historian_hysteria.txt")
 	if err != nil {
 		panic(err)
 	}
