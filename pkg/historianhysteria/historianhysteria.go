@@ -1,26 +1,22 @@
 package historianhysteria
 
 import (
-	"fmt"
 	"math"
 	"slices"
 	"strconv"
 	"strings"
+
+	"github.com/samber/lo"
 )
 
 func TotalDistance(data []string) int {
-	var distance int
-
 	result := SplitLines(data, 2)
 	result = SortLists(result)
+	distances := GetDistances(result)
 
-	fmt.Println(result)
-
-	// TODO, calculate distance between each pair
-
-	// TODO, sum all distances
-
-	return distance
+	return lo.Reduce(distances, func(aggregator, item int, _ int) int {
+		return aggregator + item
+	}, 0)
 }
 
 func SplitLines(lines []string, numberOfColumns int) [][]int {
