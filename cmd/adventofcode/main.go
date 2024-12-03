@@ -3,15 +3,27 @@ package main
 import (
 	"fmt"
 
-	"github.com/gwilczynski/adventofcode/pkg/rednosedreport"
-
 	"github.com/gwilczynski/adventofcode/pkg/historianhysteria"
+	"github.com/gwilczynski/adventofcode/pkg/mullitover"
 	"github.com/gwilczynski/adventofcode/pkg/reader"
+	"github.com/gwilczynski/adventofcode/pkg/rednosedreport"
 )
 
 func main() {
 	historianHysteria()
 	redNosedReport()
+	mullIt0ver()
+}
+
+func mullIt0ver() {
+	fmt.Println("--- Day 3: Mull It Over ---")
+	data, err := reader.ReadData("./data/mull_it_over.txt")
+	if err != nil {
+		panic(err)
+	}
+
+	r := mullitover.Call(data)
+	fmt.Println("the results of the multiplications: ", r)
 }
 
 func redNosedReport() {
@@ -21,11 +33,11 @@ func redNosedReport() {
 		panic(err)
 	}
 
-	safeReports := rednosedreport.HowManyReportsAreSafe(data, false)
-	fmt.Println("safe reports: ", safeReports)
+	r := rednosedreport.HowManyReportsAreSafe(data, false)
+	fmt.Println("safe reports: ", r)
 
-	safeReportsWithProblemDampener := rednosedreport.HowManyReportsAreSafe(data, true)
-	fmt.Println("safe reports with problem dampener: ", safeReportsWithProblemDampener)
+	rd := rednosedreport.HowManyReportsAreSafe(data, true)
+	fmt.Println("safe reports with problem dampener: ", rd)
 }
 
 func historianHysteria() {
@@ -35,9 +47,9 @@ func historianHysteria() {
 		panic(err)
 	}
 
-	totalDistance := historianhysteria.TotalDistance(data)
-	fmt.Println("total distance:", totalDistance)
+	t := historianhysteria.TotalDistance(data)
+	fmt.Println("total distance:", t)
 
-	similarityScore := historianhysteria.SimilarityScore(data)
-	fmt.Println("similarity score:", similarityScore)
+	s := historianhysteria.SimilarityScore(data)
+	fmt.Println("similarity score:", s)
 }
