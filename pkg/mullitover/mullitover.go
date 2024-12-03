@@ -1,6 +1,7 @@
 package mullitover
 
 import (
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -25,10 +26,21 @@ func Call(data []string) (sum int) {
 	return
 }
 
-const pattern = `mul\(\d+,\d+\)`
+const (
+	patternMul  = `mul\(\d+,\d+\)`
+	patternDo   = `do\(\)`
+	patternDont = `don\'t\(\)`
+)
 
 func ExtractInstructions(input string) []string {
-	r := regexp.MustCompile(pattern)
+	r := regexp.MustCompile(patternMul)
+
+	return r.FindAllString(input, -1)
+}
+
+func ExtractInstructionsCombined(input string) []string {
+	combinedPattern := fmt.Sprintf(`%s|%s|%s`, patternMul, patternDo, patternDont)
+	r := regexp.MustCompile(combinedPattern)
 
 	return r.FindAllString(input, -1)
 }

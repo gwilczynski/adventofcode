@@ -93,3 +93,30 @@ func TestExtractNumbers(t *testing.T) {
 		})
 	}
 }
+
+func TestExtractInstructionsCombined(t *testing.T) {
+	type args struct {
+		input string
+	}
+	tests := []struct {
+		name string
+		args args
+		want []string
+	}{
+		{
+			name: "only the most recent do() or don't() instruction applies. at the beginning of the program, mul instructions are enabled",
+			args: args{
+				input: "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))",
+			},
+			want: []string{"mul(2,4)", "don't()", "mul(5,5)", "mul(11,8)", "do()", "mul(8,5)"},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := ExtractInstructionsCombined(tt.args.input); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("ExtractInstructionsCombined() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
