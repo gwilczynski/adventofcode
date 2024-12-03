@@ -22,8 +22,11 @@ func mullIt0ver() {
 		panic(err)
 	}
 
-	r := mullitover.Call(data)
+	r := mullitover.Call(data, false)
 	fmt.Println("the results of the multiplications: ", r)
+
+	r = mullitover.Call(data, true)
+	fmt.Println("the results of the multiplications (combined): ", r)
 }
 
 func redNosedReport() {

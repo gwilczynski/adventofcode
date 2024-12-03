@@ -7,18 +7,25 @@ import (
 	"strings"
 )
 
-func Call(data []string) (sum int) {
-	records := make([]Num, 0, 1000)
+func Call(data []string, combined bool) (sum int) {
+	records := make([]Num, 0, 10_000)
 
 	for _, line := range data {
-		instructions := ExtractInstructionsCombined(line)
-		do := true
+		var instructions []string
+		if combined {
+			instructions = ExtractInstructionsCombined(line)
+		} else {
+			instructions = ExtractInstructions(line)
+		}
 
+		do := true
 		for _, instruction := range instructions {
 			if instruction == "do()" {
 				do = true
 				continue
-			} else if instruction == "don't()" {
+			}
+
+			if instruction == "don't()" {
 				do = false
 				continue
 			}
@@ -40,7 +47,7 @@ func Call(data []string) (sum int) {
 const (
 	patternMul  = `mul\(\d+,\d+\)`
 	patternDo   = `do\(\)`
-	patternDont = `don\'t\(\)`
+	patternDont = `don't\(\)`
 )
 
 func ExtractInstructions(input string) []string {
