@@ -21,6 +21,13 @@ func TestCall(t *testing.T) {
 			},
 			want: 161,
 		},
+		{
+			name: "only the most recent do() or don't() instruction applies. at the beginning of the program, mul instructions are enabled",
+			args: args{
+				data: []string{"xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))"},
+			},
+			want: 48,
+		},
 	}
 
 	for _, tt := range tests {

@@ -11,11 +11,22 @@ func Call(data []string) (sum int) {
 	records := make([]Num, 0, 1000)
 
 	for _, line := range data {
-		instructions := ExtractInstructions(line)
-		for _, instruction := range instructions {
-			n := ExtractNumbers(instruction)
+		instructions := ExtractInstructionsCombined(line)
+		do := true
 
-			records = append(records, n)
+		for _, instruction := range instructions {
+			if instruction == "do()" {
+				do = true
+				continue
+			} else if instruction == "don't()" {
+				do = false
+				continue
+			}
+
+			if do {
+				n := ExtractNumbers(instruction)
+				records = append(records, n)
+			}
 		}
 	}
 
