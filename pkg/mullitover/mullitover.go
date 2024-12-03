@@ -8,30 +8,30 @@ import (
 )
 
 func Call(data []string, combined bool) (sum int) {
-	for _, line := range data {
-		var instructions []string
-		if combined {
-			instructions = ExtractInstructionsCombined(line)
-		} else {
-			instructions = ExtractInstructions(line)
+	line := strings.Join(data, "")
+
+	var instructions []string
+	if combined {
+		instructions = ExtractInstructionsCombined(line)
+	} else {
+		instructions = ExtractInstructions(line)
+	}
+
+	do := true
+	for _, instruction := range instructions {
+		if instruction == "do()" {
+			do = true
+			continue
 		}
 
-		do := true
-		for _, instruction := range instructions {
-			if instruction == "do()" {
-				do = true
-				continue
-			}
+		if instruction == "don't()" {
+			do = false
+			continue
+		}
 
-			if instruction == "don't()" {
-				do = false
-				continue
-			}
-
-			if do {
-				n := ExtractNumbers(instruction)
-				sum += n.one * n.two
-			}
+		if do {
+			n := ExtractNumbers(instruction)
+			sum += n.one * n.two
 		}
 	}
 
