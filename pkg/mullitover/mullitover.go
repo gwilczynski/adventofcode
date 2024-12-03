@@ -8,8 +8,6 @@ import (
 )
 
 func Call(data []string, combined bool) (sum int) {
-	records := make([]Num, 0, 10_000)
-
 	for _, line := range data {
 		var instructions []string
 		if combined {
@@ -32,13 +30,9 @@ func Call(data []string, combined bool) (sum int) {
 
 			if do {
 				n := ExtractNumbers(instruction)
-				records = append(records, n)
+				sum += n.one * n.two
 			}
 		}
-	}
-
-	for _, record := range records {
-		sum += record.one * record.two
 	}
 
 	return
