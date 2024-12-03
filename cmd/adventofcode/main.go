@@ -17,7 +17,7 @@ func main() {
 
 func mullIt0ver() {
 	fmt.Println("--- Day 3: Mull It Over ---")
-	data, err := reader.ReadData("./data/mull_it_over.txt")
+	data, err := reader.ReadData("./cmd/data/mull_it_over.txt")
 	if err != nil {
 		panic(err)
 	}
@@ -31,7 +31,7 @@ func mullIt0ver() {
 
 func redNosedReport() {
 	fmt.Println("--- Day 2: Red-Nosed Reports ---")
-	data, err := reader.ReadData("./data/red_nosed_reports.txt")
+	data, err := reader.ReadData("./cmd/data/red_nosed_reports.txt")
 	if err != nil {
 		panic(err)
 	}
@@ -45,7 +45,7 @@ func redNosedReport() {
 
 func historianHysteria() {
 	fmt.Println("--- Day 1: Historian Hysteria ---")
-	data, err := reader.ReadData("./data/historian_hysteria.txt")
+	data, err := reader.ReadData("./cmd/data/historian_hysteria.txt")
 	if err != nil {
 		panic(err)
 	}
