@@ -44,7 +44,6 @@ func (c *Cell) Scan(matrix [][]*Cell) int {
 	numberOfRows := len(matrix[0])
 	var counter int
 
-	// Define all directional deltas for row and column movements
 	directions := []struct {
 		dCol, dRow int
 	}{
