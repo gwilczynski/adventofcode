@@ -1,7 +1,6 @@
 package ceressearch
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -12,9 +11,6 @@ func Call(data []string) int {
 	for i := 0; i < len(matrix); i++ {
 		for j := 0; j < len(matrix[i]); j++ {
 			result := matrix[i][j].Scan(matrix)
-			if result > 0 {
-				fmt.Println(result)
-			}
 
 			counter += result
 		}
