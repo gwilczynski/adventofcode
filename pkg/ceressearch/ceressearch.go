@@ -44,89 +44,61 @@ func (c *Cell) Scan(matrix [][]*Cell) int {
 	numberOfRows := len(matrix[0])
 	var counter int
 
+	// Define all directional deltas for row and column movements
+	directions := []struct {
+		dCol, dRow int
+	}{
+		{0, -1},  // UP
+		{1, -1},  // UP-RIGHT
+		{1, 0},   // RIGHT
+		{1, 1},   // RIGHT-DOWN
+		{0, 1},   // DOWN
+		{-1, 1},  // DOWN-LEFT
+		{-1, 0},  // LEFT
+		{-1, -1}, // LEFT-UP
+	}
+
 	if c.Value == "X" {
-
-		// UP
-		if c.Row-1 >= 0 && matrix[c.Column][c.Row-1].Value == "M" {
-			if c.Row-2 >= 0 && matrix[c.Column][c.Row-2].Value == "A" {
-				if c.Row-3 >= 0 && matrix[c.Column][c.Row-3].Value == "S" {
-					c.Types = append(c.Types, Up)
-					counter++
-				}
-			}
-		}
-		// UP-RIGHT
-		if c.Column+1 < numberOfColumns && c.Row-1 >= 0 && matrix[c.Column+1][c.Row-1].Value == "M" {
-			if c.Column+2 < numberOfColumns && c.Row-2 >= 0 && matrix[c.Column+2][c.Row-2].Value == "A" {
-				if c.Column+3 < numberOfColumns && c.Row-3 >= 0 && matrix[c.Column+3][c.Row-3].Value == "S" {
-					c.Types = append(c.Types, UpRight)
-					counter++
-				}
-			}
-		}
-
-		// RIGHT
-		if c.Column+1 < numberOfColumns && matrix[c.Column+1][c.Row].Value == "M" {
-			if c.Column+2 < numberOfColumns && matrix[c.Column+2][c.Row].Value == "A" {
-				if c.Column+3 < numberOfColumns && matrix[c.Column+3][c.Row].Value == "S" {
-					c.Types = append(c.Types, Right)
-					counter++
-				}
-			}
-		}
-
-		// RIGHT-DOWN
-		if c.Column+1 < numberOfColumns && c.Row+1 < numberOfRows && matrix[c.Column+1][c.Row+1].Value == "M" {
-			if c.Column+2 < numberOfColumns && c.Row+2 < numberOfRows && matrix[c.Column+2][c.Row+2].Value == "A" {
-				if c.Column+3 < numberOfColumns && c.Row+3 < numberOfRows && matrix[c.Column+3][c.Row+3].Value == "S" {
-					c.Types = append(c.Types, RightDown)
-					counter++
-				}
-			}
-		}
-
-		// DOWN
-		if c.Row+1 < numberOfRows && matrix[c.Column][c.Row+1].Value == "M" {
-			if c.Row+2 < numberOfRows && matrix[c.Column][c.Row+2].Value == "A" {
-				if c.Row+3 < numberOfRows && matrix[c.Column][c.Row+3].Value == "S" {
-					c.Types = append(c.Types, Down)
-					counter++
-				}
-			}
-		}
-
-		// DOWN-LEFT
-		if c.Column-1 >= 0 && c.Row+1 < numberOfRows && matrix[c.Column-1][c.Row+1].Value == "M" {
-			if c.Column-2 >= 0 && c.Row+2 < numberOfRows && matrix[c.Column-2][c.Row+2].Value == "A" {
-				if c.Column-3 >= 0 && c.Row+3 < numberOfRows && matrix[c.Column-3][c.Row+3].Value == "S" {
-					c.Types = append(c.Types, DownLeft)
-					counter++
-				}
-			}
-		}
-
-		// LEFT
-		if c.Column-1 >= 0 && matrix[c.Column-1][c.Row].Value == "M" {
-			if c.Column-2 >= 0 && matrix[c.Column-2][c.Row].Value == "A" {
-				if c.Column-3 >= 0 && matrix[c.Column-3][c.Row].Value == "S" {
-					c.Types = append(c.Types, Left)
-					counter++
-				}
-			}
-		}
-
-		// LEFT-UP
-		if c.Column-1 >= 0 && c.Row-1 >= 0 && matrix[c.Column-1][c.Row-1].Value == "M" {
-			if c.Column-2 >= 0 && c.Row-2 >= 0 && matrix[c.Column-2][c.Row-2].Value == "A" {
-				if c.Column-3 >= 0 && c.Row-3 >= 0 && matrix[c.Column-3][c.Row-3].Value == "S" {
-					c.Types = append(c.Types, LeftUp)
-					counter++
-				}
+		for _, dir := range directions {
+			if matchesPattern(c, dir, matrix, numberOfColumns, numberOfRows) {
+				counter++
 			}
 		}
 	}
 
 	return counter
+}
+
+func matchesPattern(c *Cell, dir struct{ dCol, dRow int }, matrix [][]*Cell, numberOfColumns, numberOfRows int) bool {
+	col, row := c.Column, c.Row
+
+	// Check for "M"
+	col += dir.dCol
+	row += dir.dRow
+	if !isValidPosition(col, row, numberOfColumns, numberOfRows) || matrix[col][row].Value != "M" {
+		return false
+	}
+
+	// Check for "A"
+	col += dir.dCol
+	row += dir.dRow
+	if !isValidPosition(col, row, numberOfColumns, numberOfRows) || matrix[col][row].Value != "A" {
+		return false
+	}
+
+	// Check for "S"
+	col += dir.dCol
+	row += dir.dRow
+	if !isValidPosition(col, row, numberOfColumns, numberOfRows) || matrix[col][row].Value != "S" {
+		return false
+	}
+
+	return true
+}
+
+// Helper function to validate matrix boundaries
+func isValidPosition(col, row, numberOfColumns, numberOfRows int) bool {
+	return col >= 0 && col < numberOfColumns && row >= 0 && row < numberOfRows
 }
 
 func Matrix(data []string) [][]*Cell {
