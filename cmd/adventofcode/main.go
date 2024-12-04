@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 
+	"github.com/gwilczynski/adventofcode/pkg/ceressearch"
+
 	"github.com/gwilczynski/adventofcode/pkg/historianhysteria"
 	"github.com/gwilczynski/adventofcode/pkg/mullitover"
 	"github.com/gwilczynski/adventofcode/pkg/reader"
@@ -13,6 +15,18 @@ func main() {
 	historianHysteria()
 	redNosedReport()
 	mullIt0ver()
+	ceresSearch()
+}
+
+func ceresSearch() {
+	fmt.Println("--- Day 4: Ceres Search ---")
+	data, err := reader.ReadData("./cmd/data/ceres_search.txt")
+	if err != nil {
+		panic(err)
+	}
+
+	r := ceressearch.Call(data)
+	fmt.Println("How many times does XMAS appear?", r)
 }
 
 func mullIt0ver() {
