@@ -71,32 +71,20 @@ func (c *Cell) Scan(matrix [][]*Cell) int {
 
 func matchesPattern(c *Cell, dir struct{ dCol, dRow int }, matrix [][]*Cell, numberOfColumns, numberOfRows int) bool {
 	col, row := c.Column, c.Row
+	sequence := []string{"M", "A", "S"}
 
-	// Check for "M"
-	col += dir.dCol
-	row += dir.dRow
-	if !isValidPosition(col, row, numberOfColumns, numberOfRows) || matrix[col][row].Value != "M" {
-		return false
-	}
+	for _, value := range sequence {
+		col += dir.dCol
+		row += dir.dRow
 
-	// Check for "A"
-	col += dir.dCol
-	row += dir.dRow
-	if !isValidPosition(col, row, numberOfColumns, numberOfRows) || matrix[col][row].Value != "A" {
-		return false
-	}
-
-	// Check for "S"
-	col += dir.dCol
-	row += dir.dRow
-	if !isValidPosition(col, row, numberOfColumns, numberOfRows) || matrix[col][row].Value != "S" {
-		return false
+		if !isValidPosition(col, row, numberOfColumns, numberOfRows) || matrix[col][row].Value != value {
+			return false
+		}
 	}
 
 	return true
 }
 
-// Helper function to validate matrix boundaries
 func isValidPosition(col, row, numberOfColumns, numberOfRows int) bool {
 	return col >= 0 && col < numberOfColumns && row >= 0 && row < numberOfRows
 }
