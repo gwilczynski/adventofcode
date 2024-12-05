@@ -25,8 +25,11 @@ func ceresSearch() {
 		panic(err)
 	}
 
-	r := ceressearch.Call(data)
+	r := ceressearch.Call(data, false)
 	fmt.Println("How many times does XMAS appear?", r)
+
+	r = ceressearch.Call(data, true)
+	fmt.Println("How many times does XMAS appear (part2)?", r)
 }
 
 func mullIt0ver() {
