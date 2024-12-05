@@ -4,13 +4,18 @@ import (
 	"strings"
 )
 
-func Call(data []string) int {
+func Call(data []string, scanX bool) int {
 	var counter int
 	matrix := Matrix(data)
 
 	for i := 0; i < len(matrix); i++ {
 		for j := 0; j < len(matrix[i]); j++ {
-			result := matrix[i][j].Scan(matrix)
+			var result int
+			if scanX {
+				result = matrix[i][j].ScanX(matrix)
+			} else {
+				result = matrix[i][j].Scan(matrix)
+			}
 
 			counter += result
 		}
@@ -48,6 +53,44 @@ func (c *Cell) Scan(matrix [][]*Cell) int {
 			if matchesPattern(c, dir, matrix, numberOfColumns, numberOfRows) {
 				counter++
 			}
+		}
+	}
+
+	return counter
+}
+
+func (c *Cell) ScanX(matrix [][]*Cell) int {
+	numberOfColumns := len(matrix)
+	numberOfRows := len(matrix[0])
+	var counter int
+
+	if !isValidPosition(c.Column-1, c.Row-1, numberOfColumns, numberOfRows) || !isValidPosition(c.Column+1, c.Row+1, numberOfColumns, numberOfRows) {
+		return 0
+	}
+
+	if c.Value == "A" {
+		var subCounter int
+
+		if matrix[c.Column-1][c.Row-1].Value == "M" && matrix[c.Column+1][c.Row+1].Value == "S" {
+			if matrix[c.Column+1][c.Row-1].Value == "M" && matrix[c.Column-1][c.Row+1].Value == "S" {
+				subCounter++
+			}
+			if matrix[c.Column+1][c.Row-1].Value == "S" && matrix[c.Column-1][c.Row+1].Value == "M" {
+				subCounter++
+			}
+		}
+
+		if matrix[c.Column-1][c.Row-1].Value == "S" && matrix[c.Column+1][c.Row+1].Value == "M" {
+			if matrix[c.Column+1][c.Row-1].Value == "S" && matrix[c.Column-1][c.Row+1].Value == "M" {
+				subCounter++
+			}
+			if matrix[c.Column+1][c.Row-1].Value == "M" && matrix[c.Column-1][c.Row+1].Value == "S" {
+				subCounter++
+			}
+		}
+
+		if subCounter == 1 {
+			counter++
 		}
 	}
 

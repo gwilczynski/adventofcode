@@ -8,7 +8,8 @@ import (
 
 func TestCall(t *testing.T) {
 	type args struct {
-		data []string
+		scanX bool
+		data  []string
 	}
 	tests := []struct {
 		name string
@@ -18,6 +19,7 @@ func TestCall(t *testing.T) {
 		{
 			name: "ok",
 			args: args{
+				scanX: false,
 				data: []string{
 					"MMMSXXMASM",
 					"MSAMXMSMSA",
@@ -33,11 +35,56 @@ func TestCall(t *testing.T) {
 			},
 			want: 18,
 		},
+		{
+			name: "X",
+			args: args{
+				scanX: true,
+				data: []string{
+					".M.S......",
+					"..A..MSMS.",
+					".M.S.MAA..",
+					"..A.ASMSM.",
+					".M.S.M....",
+					"..........",
+					"S.S.S.S.S.",
+					".A.A.A.A..",
+					"M.M.M.M.M.",
+					"..........",
+				},
+			},
+			want: 9,
+		},
+		{
+			name: "XX",
+			args: args{
+				scanX: true,
+				data: []string{
+					"..........",
+					".M.S......",
+					"..A.......",
+					".M.S......",
+					"..........",
+					".S.S......",
+					"..A.......",
+					".M.M......",
+					"..........",
+					".S.M......",
+					"..A.......",
+					".S.M......",
+					"..........",
+					".M.M......",
+					"..A.......",
+					".S.S......",
+					"..........",
+				},
+			},
+			want: 4,
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ceressearch.Call(tt.args.data); got != tt.want {
+			if got := ceressearch.Call(tt.args.data, tt.args.scanX); got != tt.want {
 				t.Errorf("Call() = %v, want %v", got, tt.want)
 			}
 		})
