@@ -19,24 +19,10 @@ func Call(data []string) int {
 	return counter
 }
 
-type CellType string
-
-const (
-	Up        CellType = "UP"
-	UpRight   CellType = "UP-RIGHT"
-	Right     CellType = "RIGHT"
-	RightDown CellType = "RIGHT-DOWN"
-	Down      CellType = "DOWN"
-	DownLeft  CellType = "DOWN-LEFT"
-	Left      CellType = "LEFT"
-	LeftUp    CellType = "LEFT-UP"
-)
-
 type Cell struct {
 	Value  string
 	Row    int
 	Column int
-	Types  []CellType
 }
 
 func (c *Cell) Scan(matrix [][]*Cell) int {
@@ -100,7 +86,6 @@ func Matrix(data []string) [][]*Cell {
 				Value:  letters[j],
 				Row:    j,
 				Column: i,
-				Types:  make([]CellType, 0),
 			}
 		}
 	}
