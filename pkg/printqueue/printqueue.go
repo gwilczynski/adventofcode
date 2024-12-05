@@ -1,16 +1,26 @@
 package printqueue
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 )
 
 func Call(data []string) int {
 	rules, updates := RulesAndUpdates(data)
-	fmt.Println(rules, updates)
+	var acc int
 
-	return len(data)
+	for _, update := range updates {
+		if Valid(update, rules) {
+			// TODO, find middle and add to acc
+			acc += 1
+		}
+	}
+
+	return acc
+}
+
+func Valid(update []int, rules []Rule) bool {
+	return false
 }
 
 type Rule struct {
