@@ -59,37 +59,38 @@ func (c *Cell) Scan(matrix [][]*Cell) int {
 	return counter
 }
 
-func (c *Cell) ScanX(matrix [][]*Cell) int {
+func (c *Cell) ScanX(matrix [][]*Cell) (counter int) {
 	numberOfColumns := len(matrix)
 	numberOfRows := len(matrix[0])
-	var counter int
 
 	if !isValidPosition(c.Column-1, c.Row-1, numberOfColumns, numberOfRows) || !isValidPosition(c.Column+1, c.Row+1, numberOfColumns, numberOfRows) {
 		return 0
 	}
 
 	if c.Value == "A" {
-		var subCounter int
+		var ok bool
 
-		if matrix[c.Column-1][c.Row-1].Value == "M" && matrix[c.Column+1][c.Row+1].Value == "S" {
-			if matrix[c.Column+1][c.Row-1].Value == "M" && matrix[c.Column-1][c.Row+1].Value == "S" {
-				subCounter++
-			}
-			if matrix[c.Column+1][c.Row-1].Value == "S" && matrix[c.Column-1][c.Row+1].Value == "M" {
-				subCounter++
+		sequence := []struct{ start, end string }{
+			{
+				start: "M", end: "S",
+			},
+			{
+				start: "S", end: "M",
+			},
+		}
+
+		for _, s := range sequence {
+			if matrix[c.Column-1][c.Row-1].Value == s.start && matrix[c.Column+1][c.Row+1].Value == s.end {
+				if matrix[c.Column+1][c.Row-1].Value == s.start && matrix[c.Column-1][c.Row+1].Value == s.end {
+					ok = true
+				}
+				if matrix[c.Column+1][c.Row-1].Value == s.end && matrix[c.Column-1][c.Row+1].Value == s.start {
+					ok = true
+				}
 			}
 		}
 
-		if matrix[c.Column-1][c.Row-1].Value == "S" && matrix[c.Column+1][c.Row+1].Value == "M" {
-			if matrix[c.Column+1][c.Row-1].Value == "S" && matrix[c.Column-1][c.Row+1].Value == "M" {
-				subCounter++
-			}
-			if matrix[c.Column+1][c.Row-1].Value == "M" && matrix[c.Column-1][c.Row+1].Value == "S" {
-				subCounter++
-			}
-		}
-
-		if subCounter == 1 {
+		if ok {
 			counter++
 		}
 	}
