@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"strings"
 	"time"
-
-	"github.com/inancgumus/screen"
 )
 
 func Call(data []string) int {
@@ -28,7 +26,7 @@ func Call(data []string) int {
 	}
 
 	printScreen(fields, guard)
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 1_000; i++ {
 		guard.Flight(fields)
 		printScreen(fields, guard)
 	}
@@ -37,14 +35,15 @@ func Call(data []string) int {
 }
 
 func printScreen(fields [][]*Field, guard *Guard) {
-	screen.Clear()
-	screen.MoveTopLeft()
-	time.Sleep(time.Second)
+	time.Sleep(50 * time.Millisecond)
 
-	for j := 0; j < len(fields); j++ {
+	fmt.Println("")
+	fmt.Println("")
+	fmt.Println("")
+	for j := guard.P.J - 10; j < guard.P.J+10; j++ {
 		fmt.Println("")
 
-		for i := 0; i < len(fields[j]); i++ {
+		for i := guard.P.I - 20; i < guard.P.I+20; i++ {
 			if guard.P.I == i && guard.P.J == j {
 				fmt.Print(guard)
 			} else {
@@ -134,18 +133,22 @@ func (g *Guard) String() string {
 func (g *Guard) Rotate() {
 	if g.D == Up {
 		g.D = Right
+		return
 	}
 
 	if g.D == Right {
 		g.D = Down
+		return
 	}
 
 	if g.D == Down {
 		g.D = Left
+		return
 	}
 
 	if g.D == Left {
 		g.D = Up
+		return
 	}
 }
 
