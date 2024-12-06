@@ -1,6 +1,7 @@
 package printqueue
 
 import (
+	"slices"
 	"strconv"
 	"strings"
 )
@@ -11,16 +12,38 @@ func Call(data []string) int {
 
 	for _, update := range updates {
 		if Valid(update, rules) {
-			// TODO, find middle and add to acc
-			acc += 1
+			m := Middle(update)
+			acc += m
 		}
 	}
 
 	return acc
 }
 
+func Middle(update []int) int {
+	i := len(update) / 2
+
+	return update[i]
+}
+
 func Valid(update []int, rules []Rule) bool {
-	return false
+	var counter int
+	for i, u := range update {
+		if i == 0 || i == len(update)-1 {
+			continue
+		}
+
+		for _, rule := range rules {
+			if rule.before == u && slices.Contains(update[:i], rule.after) {
+				counter++
+			}
+			if rule.after == u && slices.Contains(update[i+1:], rule.before) {
+				counter++
+			}
+		}
+	}
+
+	return counter == 0
 }
 
 type Rule struct {
