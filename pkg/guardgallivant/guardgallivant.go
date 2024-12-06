@@ -123,42 +123,30 @@ type Guard struct {
 }
 
 func (g *Guard) String() string {
-	var d string
-	if g.D == Up {
-		d = "^"
+	switch g.D {
+	case Up:
+		return "^"
+	case Down:
+		return "v"
+	case Right:
+		return ">"
+	case Left:
+		return "<"
+	default:
+		return ""
 	}
-	if g.D == Down {
-		d = "v"
-	}
-	if g.D == Right {
-		d = ">"
-	}
-	if g.D == Left {
-		d = "<"
-	}
-
-	return d
 }
 
 func (g *Guard) Rotate() {
-	if g.D == Up {
+	switch g.D {
+	case Up:
 		g.D = Right
-		return
-	}
-
-	if g.D == Right {
+	case Right:
 		g.D = Down
-		return
-	}
-
-	if g.D == Down {
+	case Down:
 		g.D = Left
-		return
-	}
-
-	if g.D == Left {
+	case Left:
 		g.D = Up
-		return
 	}
 }
 
@@ -168,56 +156,30 @@ func (g *Guard) Flight(fields [][]*Field) {
 		return
 	}
 
-	if g.D == Up {
-		f := fields[g.P.J-1][g.P.I]
-
-		if f.T == Free {
-			if !f.Visited {
-				g.Visited++
-			}
-			f.Visited = true
-			g.P.J--
-		} else {
-			g.Rotate()
-		}
+	var dx, dy int
+	switch g.D {
+	case Up:
+		dx, dy = 0, -1
+	case Down:
+		dx, dy = 0, 1
+	case Right:
+		dx, dy = 1, 0
+	case Left:
+		dx, dy = -1, 0
 	}
-	if g.D == Down {
-		f := fields[g.P.J+1][g.P.I]
 
-		if f.T == Free {
-			if !f.Visited {
-				g.Visited++
-			}
-			f.Visited = true
-			g.P.J++
-		} else {
-			g.Rotate()
-		}
-	}
-	if g.D == Right {
-		f := fields[g.P.J][g.P.I+1]
+	nextJ := g.P.J + dy
+	nextI := g.P.I + dx
 
-		if f.T == Free {
-			if !f.Visited {
-				g.Visited++
-			}
-			f.Visited = true
-			g.P.I++
-		} else {
-			g.Rotate()
+	f := fields[nextJ][nextI]
+	if f.T == Free {
+		if !f.Visited {
+			g.Visited++
 		}
-	}
-	if g.D == Left {
-		f := fields[g.P.J][g.P.I-1]
-
-		if f.T == Free {
-			if !f.Visited {
-				g.Visited++
-			}
-			f.Visited = true
-			g.P.I--
-		} else {
-			g.Rotate()
-		}
+		f.Visited = true
+		g.P.J = nextJ
+		g.P.I = nextI
+	} else {
+		g.Rotate()
 	}
 }
