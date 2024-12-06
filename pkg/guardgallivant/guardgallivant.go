@@ -8,7 +8,6 @@ import (
 )
 
 func Call(data []string) int {
-	var acc int
 	var guard *Guard
 	var fields [][]*Field
 
@@ -25,13 +24,17 @@ func Call(data []string) int {
 		panic(errors.New("guard is nil"))
 	}
 
-	printScreen(fields, guard)
+	// printScreen(fields, guard)
 	for i := 0; i < 1_000_000; i++ {
 		guard.Flight(fields)
-		printScreen(fields, guard)
+		// printScreen(fields, guard)
+
+		if guard.Stop {
+			return guard.Visited
+		}
 	}
 
-	return acc
+	panic(errors.New("guard did not leave"))
 }
 
 func printScreen(fields [][]*Field, guard *Guard) {
@@ -113,8 +116,10 @@ type Position struct {
 	I, J int
 }
 type Guard struct {
-	D Direction
-	P Position
+	D       Direction
+	P       Position
+	Visited int
+	Stop    bool
 }
 
 func (g *Guard) String() string {
@@ -158,9 +163,18 @@ func (g *Guard) Rotate() {
 }
 
 func (g *Guard) Flight(fields [][]*Field) {
+	if g.P.J-1 < 0 || g.P.I-1 < 0 || g.P.I+1 >= len(fields[0]) || g.P.J+1 >= len(fields) {
+		g.Stop = true
+		return
+	}
+
 	if g.D == Up {
 		f := fields[g.P.J-1][g.P.I]
+
 		if f.T == Free {
+			if !f.Visited {
+				g.Visited++
+			}
 			f.Visited = true
 			g.P.J--
 		} else {
@@ -169,7 +183,11 @@ func (g *Guard) Flight(fields [][]*Field) {
 	}
 	if g.D == Down {
 		f := fields[g.P.J+1][g.P.I]
+
 		if f.T == Free {
+			if !f.Visited {
+				g.Visited++
+			}
 			f.Visited = true
 			g.P.J++
 		} else {
@@ -178,7 +196,11 @@ func (g *Guard) Flight(fields [][]*Field) {
 	}
 	if g.D == Right {
 		f := fields[g.P.J][g.P.I+1]
+
 		if f.T == Free {
+			if !f.Visited {
+				g.Visited++
+			}
 			f.Visited = true
 			g.P.I++
 		} else {
@@ -187,7 +209,11 @@ func (g *Guard) Flight(fields [][]*Field) {
 	}
 	if g.D == Left {
 		f := fields[g.P.J][g.P.I-1]
+
 		if f.T == Free {
+			if !f.Visited {
+				g.Visited++
+			}
 			f.Visited = true
 			g.P.I--
 		} else {
