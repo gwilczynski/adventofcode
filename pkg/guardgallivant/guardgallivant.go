@@ -26,7 +26,7 @@ func Call(data []string) int {
 	}
 
 	printScreen(fields, guard)
-	for i := 0; i < 1_000; i++ {
+	for i := 0; i < 1_000_000; i++ {
 		guard.Flight(fields)
 		printScreen(fields, guard)
 	}
@@ -35,7 +35,7 @@ func Call(data []string) int {
 }
 
 func printScreen(fields [][]*Field, guard *Guard) {
-	time.Sleep(50 * time.Millisecond)
+	time.Sleep(500 * time.Millisecond)
 
 	fmt.Println("")
 	fmt.Println("")
@@ -88,10 +88,15 @@ const (
 )
 
 type Field struct {
-	T FieldType
+	T       FieldType
+	Visited bool
 }
 
 func (f Field) String() string {
+	if f.Visited {
+		return "*"
+	}
+
 	return string(f.T)
 }
 
@@ -154,28 +159,36 @@ func (g *Guard) Rotate() {
 
 func (g *Guard) Flight(fields [][]*Field) {
 	if g.D == Up {
-		if fields[g.P.J-1][g.P.I].T == Free {
+		f := fields[g.P.J-1][g.P.I]
+		if f.T == Free {
+			f.Visited = true
 			g.P.J--
 		} else {
 			g.Rotate()
 		}
 	}
 	if g.D == Down {
-		if fields[g.P.J+1][g.P.I].T == Free {
+		f := fields[g.P.J+1][g.P.I]
+		if f.T == Free {
+			f.Visited = true
 			g.P.J++
 		} else {
 			g.Rotate()
 		}
 	}
 	if g.D == Right {
-		if fields[g.P.J][g.P.I+1].T == Free {
+		f := fields[g.P.J][g.P.I+1]
+		if f.T == Free {
+			f.Visited = true
 			g.P.I++
 		} else {
 			g.Rotate()
 		}
 	}
 	if g.D == Left {
-		if fields[g.P.J][g.P.I-1].T == Free {
+		f := fields[g.P.J][g.P.I-1]
+		if f.T == Free {
+			f.Visited = true
 			g.P.I--
 		} else {
 			g.Rotate()
