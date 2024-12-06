@@ -24,18 +24,20 @@ func Call(data []string) (correct int, fixed int) {
 }
 
 func Sort(update []int, rules []Rule) []int {
-	for i := 0; i < len(update); i++ {
+	for j := 0; j <= len(update); j++ {
 		for i, u := range update {
 			if i == 0 || i == len(update)-1 {
 				continue
 			}
 
 			for _, rule := range rules {
-				if rule.before == u && slices.Contains(update[:i], rule.after) {
-					replace(update, i, Before)
-				}
-				if rule.after == u && slices.Contains(update[i+1:], rule.before) {
-					replace(update, i, After)
+				for k := 0; k <= len(update); k++ {
+					if rule.before == u && slices.Contains(update[:i], rule.after) {
+						replace(update, i, Before)
+					}
+					if rule.after == u && slices.Contains(update[i+1:], rule.before) {
+						replace(update, i, After)
+					}
 				}
 			}
 		}
