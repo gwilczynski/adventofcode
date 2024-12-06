@@ -3,22 +3,33 @@ package main
 import (
 	"fmt"
 
-	"github.com/gwilczynski/adventofcode/pkg/printqueue"
-
 	"github.com/gwilczynski/adventofcode/pkg/ceressearch"
-
+	"github.com/gwilczynski/adventofcode/pkg/guardgallivant"
 	"github.com/gwilczynski/adventofcode/pkg/historianhysteria"
 	"github.com/gwilczynski/adventofcode/pkg/mullitover"
+	"github.com/gwilczynski/adventofcode/pkg/printqueue"
 	"github.com/gwilczynski/adventofcode/pkg/reader"
 	"github.com/gwilczynski/adventofcode/pkg/rednosedreport"
 )
 
 func main() {
-	historianHysteria()
-	redNosedReport()
-	mullIt0ver()
-	ceresSearch()
-	printQueue()
+	// historianHysteria()
+	// redNosedReport()
+	// mullIt0ver()
+	// ceresSearch()
+	// printQueue()
+	guardGallivant()
+}
+
+func guardGallivant() {
+	fmt.Println("Day 6: Guard Gallivant ---")
+	data, err := reader.ReadData("./cmd/data/guard_gallivant.txt")
+	if err != nil {
+		panic(err)
+	}
+
+	r := guardgallivant.Call(data)
+	fmt.Println("result: ", r)
 }
 
 func printQueue() {
