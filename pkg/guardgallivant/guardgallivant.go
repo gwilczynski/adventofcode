@@ -4,6 +4,9 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"time"
+
+	"github.com/inancgumus/screen"
 )
 
 func Call(data []string) int {
@@ -25,11 +28,19 @@ func Call(data []string) int {
 	}
 
 	printScreen(fields, guard)
+	for i := 0; i < 10; i++ {
+		guard.Flight(fields)
+		printScreen(fields, guard)
+	}
 
 	return acc
 }
 
 func printScreen(fields [][]*Field, guard *Guard) {
+	screen.Clear()
+	screen.MoveTopLeft()
+	time.Sleep(time.Second)
+
 	for j := 0; j < len(fields); j++ {
 		fmt.Println("")
 
@@ -102,7 +113,7 @@ type Guard struct {
 	P Position
 }
 
-func (g Guard) String() string {
+func (g *Guard) String() string {
 	var d string
 	if g.D == Up {
 		d = "^"
@@ -118,9 +129,53 @@ func (g Guard) String() string {
 	}
 
 	return d
-	// return fmt.Sprintf("%s(%d,%d)", d, g.P.I, g.P.J)
 }
 
-func (g Guard) Flight() (newPosition Position) {
-	return g.P
+func (g *Guard) Rotate() {
+	if g.D == Up {
+		g.D = Right
+	}
+
+	if g.D == Right {
+		g.D = Down
+	}
+
+	if g.D == Down {
+		g.D = Left
+	}
+
+	if g.D == Left {
+		g.D = Up
+	}
+}
+
+func (g *Guard) Flight(fields [][]*Field) {
+	if g.D == Up {
+		if fields[g.P.J-1][g.P.I].T == Free {
+			g.P.J--
+		} else {
+			g.Rotate()
+		}
+	}
+	if g.D == Down {
+		if fields[g.P.J+1][g.P.I].T == Free {
+			g.P.J++
+		} else {
+			g.Rotate()
+		}
+	}
+	if g.D == Right {
+		if fields[g.P.J][g.P.I+1].T == Free {
+			g.P.I++
+		} else {
+			g.Rotate()
+		}
+	}
+	if g.D == Left {
+		if fields[g.P.J][g.P.I-1].T == Free {
+			g.P.I--
+		} else {
+			g.Rotate()
+		}
+	}
 }
