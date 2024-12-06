@@ -144,7 +144,7 @@ func TestCall(t *testing.T) {
 					"......#...",
 				},
 			},
-			want: 41,
+			want: 6,
 		},
 	}
 	for _, tt := range tests {

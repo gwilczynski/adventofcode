@@ -9,30 +9,36 @@ import (
 
 func Call(data []string) int {
 	fieldsInit, _ := build(data)
+	var wasThere int
 
-	for k := 0; k < len(fieldsInit[0]); k++ {
-		for l := 0; l < len(fieldsInit); l++ {
+	for j := 0; j < len(fieldsInit); j++ {
+		for i := 0; i < len(fieldsInit[0]); i++ {
 			fields, guard := build(data)
-			if fields[k][l].T == Obstruction {
+			if fields[j][i].T == Obstruction {
+				continue
+			}
+			if guard.P.I == i && guard.P.J == j {
 				continue
 			}
 
-			fields[k][l].T = Obstruction
+			fields[j][i].T = NewObstruction
 
-			printScreen(fields, guard)
-			for i := 0; i < 1_000; i++ {
+			for iter := 0; iter < 100_000_000; iter++ {
 				guard.Flight(fields)
-				printScreen(fields, guard)
 
 				if guard.Stop {
-					// return guard.Visited
+					if guard.Loop > 1 {
+						printScreen(fields, guard)
+						wasThere++
+					}
+
 					break
 				}
 			}
 		}
 	}
 
-	panic(errors.New("guard did not leave"))
+	return wasThere
 }
 
 func build(data []string) (fields [][]*Field, guard *Guard) {
@@ -53,11 +59,8 @@ func build(data []string) (fields [][]*Field, guard *Guard) {
 }
 
 func printScreen(fields [][]*Field, guard *Guard) {
-	time.Sleep(100 * time.Millisecond)
+	time.Sleep(50 * time.Millisecond)
 
-	fmt.Println("")
-	fmt.Println("")
-	fmt.Println("")
 	for j := 0; j < len(fields[0]); j++ {
 		fmt.Println("")
 
@@ -69,6 +72,9 @@ func printScreen(fields [][]*Field, guard *Guard) {
 			}
 		}
 	}
+	fmt.Println("")
+	fmt.Println("(", guard.P.I, ",", guard.P.J, ")")
+	fmt.Println("")
 }
 
 func DecodeLine(line string, j int) ([]*Field, *Guard) {
@@ -101,8 +107,9 @@ func DecodeLine(line string, j int) ([]*Field, *Guard) {
 type FieldType string
 
 const (
-	Free        FieldType = "."
-	Obstruction FieldType = "#"
+	Free           FieldType = "."
+	Obstruction    FieldType = "#"
+	NewObstruction FieldType = "O"
 )
 
 type PathDirection string
@@ -119,6 +126,7 @@ type Field struct {
 	T       FieldType
 	Visited bool
 	Path    PathDirection
+	Hit     int
 }
 
 func (f Field) String() string {
@@ -146,6 +154,7 @@ type Guard struct {
 	P       Position
 	Visited int
 	Stop    bool
+	Loop    int
 }
 
 func (g *Guard) String() string {
@@ -184,12 +193,20 @@ func (g *Guard) Flight(fields [][]*Field) {
 
 	if g.D == Up {
 		f := fields[g.P.J-1][g.P.I]
+		if f.T == NewObstruction {
+			if g.Loop > 1 {
+				g.Stop = true
+			}
+			g.Loop++
+		}
 
 		if f.T == Free {
 			if !f.Visited {
 				g.Visited++
 			}
+
 			f.Visited = true
+			f.Hit++
 			f.Path = PathUp
 			g.P.J--
 		} else {
@@ -197,14 +214,23 @@ func (g *Guard) Flight(fields [][]*Field) {
 			g.Rotate()
 		}
 	}
+
 	if g.D == Down {
 		f := fields[g.P.J+1][g.P.I]
+		if f.T == NewObstruction {
+			if g.Loop > 1 {
+				g.Stop = true
+			}
+			g.Loop++
+		}
 
 		if f.T == Free {
 			if !f.Visited {
 				g.Visited++
 			}
+
 			f.Visited = true
+			f.Hit++
 			f.Path = PathDown
 			g.P.J++
 		} else {
@@ -212,14 +238,23 @@ func (g *Guard) Flight(fields [][]*Field) {
 			g.Rotate()
 		}
 	}
+
 	if g.D == Right {
 		f := fields[g.P.J][g.P.I+1]
+		if f.T == NewObstruction {
+			if g.Loop > 1 {
+				g.Stop = true
+			}
+			g.Loop++
+		}
 
 		if f.T == Free {
 			if !f.Visited {
 				g.Visited++
 			}
+
 			f.Visited = true
+			f.Hit++
 			f.Path = PathRight
 			g.P.I++
 		} else {
@@ -227,14 +262,23 @@ func (g *Guard) Flight(fields [][]*Field) {
 			g.Rotate()
 		}
 	}
+
 	if g.D == Left {
 		f := fields[g.P.J][g.P.I-1]
+		if f.T == NewObstruction {
+			if g.Loop > 1 {
+				g.Stop = true
+			}
+			g.Loop++
+		}
 
 		if f.T == Free {
 			if !f.Visited {
 				g.Visited++
 			}
+
 			f.Visited = true
+			f.Hit++
 			f.Path = PathLeft
 			g.P.I--
 		} else {
