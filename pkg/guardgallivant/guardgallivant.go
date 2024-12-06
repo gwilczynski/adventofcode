@@ -8,9 +8,34 @@ import (
 )
 
 func Call(data []string) int {
-	var guard *Guard
-	var fields [][]*Field
+	fieldsInit, _ := build(data)
 
+	for k := 0; k < len(fieldsInit[0]); k++ {
+		for l := 0; l < len(fieldsInit); l++ {
+			fields, guard := build(data)
+			if fields[k][l].T == Obstruction {
+				continue
+			}
+
+			fields[k][l].T = Obstruction
+
+			printScreen(fields, guard)
+			for i := 0; i < 1_000; i++ {
+				guard.Flight(fields)
+				printScreen(fields, guard)
+
+				if guard.Stop {
+					// return guard.Visited
+					break
+				}
+			}
+		}
+	}
+
+	panic(errors.New("guard did not leave"))
+}
+
+func build(data []string) (fields [][]*Field, guard *Guard) {
 	for j, d := range data {
 		l, g := DecodeLine(d, j)
 
@@ -24,21 +49,11 @@ func Call(data []string) int {
 		panic(errors.New("guard is nil"))
 	}
 
-	printScreen(fields, guard)
-	for i := 0; i < 1_000_000; i++ {
-		guard.Flight(fields)
-		printScreen(fields, guard)
-
-		if guard.Stop {
-			return guard.Visited
-		}
-	}
-
-	panic(errors.New("guard did not leave"))
+	return fields, guard
 }
 
 func printScreen(fields [][]*Field, guard *Guard) {
-	time.Sleep(500 * time.Millisecond)
+	time.Sleep(100 * time.Millisecond)
 
 	fmt.Println("")
 	fmt.Println("")
