@@ -28,8 +28,11 @@ func printQueue() {
 		panic(err)
 	}
 
-	r := printqueue.Call(data)
+	r, _ := printqueue.Call(data)
 	fmt.Println("result: ", r)
+
+	_, r = printqueue.Call(data)
+	fmt.Println("result (part 2): ", r)
 }
 
 func ceresSearch() {

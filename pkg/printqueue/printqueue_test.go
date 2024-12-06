@@ -10,9 +10,10 @@ func TestCall(t *testing.T) {
 		data []string
 	}
 	tests := []struct {
-		name string
-		args args
-		want int
+		name      string
+		args      args
+		want      int
+		wantFixed int
 	}{
 		{
 			name: "ok",
@@ -48,13 +49,18 @@ func TestCall(t *testing.T) {
 					"97,13,75,29,47",
 				},
 			},
-			want: 143,
+			want:      143,
+			wantFixed: 123,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Call(tt.args.data); got != tt.want {
-				t.Errorf("Call() = %v, want %v", got, tt.want)
+			if correct, _ := Call(tt.args.data); correct != tt.want {
+				t.Errorf("Call() = %v, want %v", correct, tt.want)
+			}
+
+			if _, fixed := Call(tt.args.data); fixed != tt.wantFixed {
+				t.Errorf("Call() = %v, want %v", fixed, tt.wantFixed)
 			}
 		})
 	}
@@ -252,6 +258,79 @@ func TestMiddle(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := Middle(tt.args.update); got != tt.want {
 				t.Errorf("Middle() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestSort(t *testing.T) {
+	input := []string{
+		"47|53",
+		"97|13",
+		"97|61",
+		"97|47",
+		"75|29",
+		"61|13",
+		"75|53",
+		"29|13",
+		"97|29",
+		"53|29",
+		"61|53",
+		"97|53",
+		"61|29",
+		"47|13",
+		"75|47",
+		"97|75",
+		"47|61",
+		"75|61",
+		"47|29",
+		"75|13",
+		"53|13",
+		"",
+		"75,47,61,53,29",
+		"97,61,53,29,13",
+		"75,29,13",
+		"75,97,47,61,53",
+		"61,13,29",
+		"97,13,75,29,47",
+	}
+	rules, _ := RulesAndUpdates(input)
+
+	type args struct {
+		update []int
+	}
+	tests := []struct {
+		name string
+		args args
+		want []int
+	}{
+		{
+			name: "ok",
+			args: args{
+				update: []int{75, 97, 47, 61, 53},
+			},
+			want: []int{97, 75, 47, 61, 53},
+		},
+		{
+			name: "ok",
+			args: args{
+				update: []int{61, 13, 29},
+			},
+			want: []int{61, 29, 13},
+		},
+		{
+			name: "ok",
+			args: args{
+				update: []int{97, 13, 75, 29, 47},
+			},
+			want: []int{97, 75, 47, 29, 13},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := Sort(tt.args.update, rules); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Sort() = %v, want %v", got, tt.want)
 			}
 		})
 	}
