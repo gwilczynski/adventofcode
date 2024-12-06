@@ -118,3 +118,40 @@ func TestDecodeLine(t *testing.T) {
 		})
 	}
 }
+
+func TestCall(t *testing.T) {
+	type args struct {
+		data []string
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{
+			name: "ok",
+			args: args{
+				data: []string{
+					"....#.....",
+					".........#",
+					"..........",
+					"..#.......",
+					".......#..",
+					"..........",
+					".#..^.....",
+					"........#.",
+					"#.........",
+					"......#...",
+				},
+			},
+			want: 41,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := guardgallivant.Call(tt.args.data); got != tt.want {
+				t.Errorf("Call() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
