@@ -24,10 +24,10 @@ func Call(data []string) int {
 		panic(errors.New("guard is nil"))
 	}
 
-	// printScreen(fields, guard)
+	printScreen(fields, guard)
 	for i := 0; i < 1_000_000; i++ {
 		guard.Flight(fields)
-		// printScreen(fields, guard)
+		printScreen(fields, guard)
 
 		if guard.Stop {
 			return guard.Visited
@@ -43,10 +43,10 @@ func printScreen(fields [][]*Field, guard *Guard) {
 	fmt.Println("")
 	fmt.Println("")
 	fmt.Println("")
-	for j := guard.P.J - 10; j < guard.P.J+10; j++ {
+	for j := 0; j < len(fields[0]); j++ {
 		fmt.Println("")
 
-		for i := guard.P.I - 20; i < guard.P.I+20; i++ {
+		for i := 0; i < len(fields); i++ {
 			if guard.P.I == i && guard.P.J == j {
 				fmt.Print(guard)
 			} else {
@@ -90,14 +90,25 @@ const (
 	Obstruction FieldType = "#"
 )
 
+type PathDirection string
+
+const (
+	PathUp    PathDirection = "|"
+	PathDown  PathDirection = "|"
+	PathLeft  PathDirection = "-"
+	PathRight PathDirection = "-"
+	PathTurn  PathDirection = "+"
+)
+
 type Field struct {
 	T       FieldType
 	Visited bool
+	Path    PathDirection
 }
 
 func (f Field) String() string {
 	if f.Visited {
-		return "*"
+		return string(f.Path)
 	}
 
 	return string(f.T)
@@ -156,30 +167,64 @@ func (g *Guard) Flight(fields [][]*Field) {
 		return
 	}
 
-	var dx, dy int
-	switch g.D {
-	case Up:
-		dx, dy = 0, -1
-	case Down:
-		dx, dy = 0, 1
-	case Right:
-		dx, dy = 1, 0
-	case Left:
-		dx, dy = -1, 0
-	}
+	if g.D == Up {
+		f := fields[g.P.J-1][g.P.I]
 
-	nextJ := g.P.J + dy
-	nextI := g.P.I + dx
-
-	f := fields[nextJ][nextI]
-	if f.T == Free {
-		if !f.Visited {
-			g.Visited++
+		if f.T == Free {
+			if !f.Visited {
+				g.Visited++
+			}
+			f.Visited = true
+			f.Path = PathUp
+			g.P.J--
+		} else {
+			fields[g.P.J][g.P.I].Path = PathTurn
+			g.Rotate()
 		}
-		f.Visited = true
-		g.P.J = nextJ
-		g.P.I = nextI
-	} else {
-		g.Rotate()
+	}
+	if g.D == Down {
+		f := fields[g.P.J+1][g.P.I]
+
+		if f.T == Free {
+			if !f.Visited {
+				g.Visited++
+			}
+			f.Visited = true
+			f.Path = PathDown
+			g.P.J++
+		} else {
+			fields[g.P.J][g.P.I].Path = PathTurn
+			g.Rotate()
+		}
+	}
+	if g.D == Right {
+		f := fields[g.P.J][g.P.I+1]
+
+		if f.T == Free {
+			if !f.Visited {
+				g.Visited++
+			}
+			f.Visited = true
+			f.Path = PathRight
+			g.P.I++
+		} else {
+			fields[g.P.J][g.P.I].Path = PathTurn
+			g.Rotate()
+		}
+	}
+	if g.D == Left {
+		f := fields[g.P.J][g.P.I-1]
+
+		if f.T == Free {
+			if !f.Visited {
+				g.Visited++
+			}
+			f.Visited = true
+			f.Path = PathLeft
+			g.P.I--
+		} else {
+			fields[g.P.J][g.P.I].Path = PathTurn
+			g.Rotate()
+		}
 	}
 }

@@ -23,7 +23,7 @@ func main() {
 
 func guardGallivant() {
 	fmt.Println("Day 6: Guard Gallivant ---")
-	data, err := reader.ReadData("./cmd/data/guard_gallivant.txt")
+	data, err := reader.ReadData("./cmd/data/test.txt")
 	if err != nil {
 		panic(err)
 	}
