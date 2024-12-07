@@ -14,11 +14,12 @@ type Puzzle struct {
 	Numbers []int
 }
 
-func Parse(data []string) []Puzzle {
-	puzzles := make([]Puzzle, len(data))
+func Parse(data []string) []*Puzzle {
+	puzzles := make([]*Puzzle, len(data))
 
-	// for _, d := range data {
-	// }
+	for i, d := range data {
+		puzzles[i] = ParseLine(d)
+	}
 
 	return puzzles
 }

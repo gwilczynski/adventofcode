@@ -81,3 +81,47 @@ func TestParseLine(t *testing.T) {
 		})
 	}
 }
+
+func TestParse(t *testing.T) {
+	type args struct {
+		data []string
+	}
+	tests := []struct {
+		name string
+		args args
+		want []*Puzzle
+	}{
+		{
+			name: "ok",
+			args: args{
+				data: []string{
+					"190: 10 19",
+					"3267: 81 40 27",
+					"83: 17 5",
+				},
+			},
+			want: []*Puzzle{
+				{
+					Result:  190,
+					Numbers: []int{10, 19},
+				},
+				{
+					Result:  3267,
+					Numbers: []int{81, 40, 27},
+				},
+				{
+					Result:  83,
+					Numbers: []int{17, 5},
+				},
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := Parse(tt.args.data); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Parse() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
