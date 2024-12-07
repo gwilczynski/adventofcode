@@ -1,57 +1,49 @@
 package bridgerepair
 
 import (
-	"slices"
 	"strconv"
 	"strings"
 )
 
 func Call(data []string) int {
-	puzzles := Parse(data)
+	var acc int
 
-	return len(puzzles)
+	for _, puzzle := range Parse(data) {
+		if isValid(puzzle.Result, puzzle.Numbers) {
+			acc += puzzle.Result
+		}
+	}
+
+	return acc
 }
 
-func Eval(nums []int) []int {
-	if len(nums) == 0 {
-		return []int{}
+func isValid(testValue int, numbers []int) bool {
+	n := len(numbers)
+	if n == 0 {
+		return false
 	}
 
-	results := make(map[string]int)
-
-	var helper func(expression string, index int, currentResult int, lastOperand int, nums []int)
-	helper = func(expression string, index int, currentResult int, lastOperand int, nums []int) {
-		if index == len(nums) {
-			results[expression] = currentResult
-			return
+	// Recursive function to generate all combinations of + and * operators
+	var dfs func(index int, currentValue int) bool
+	dfs = func(index int, currentValue int) bool {
+		if index == n {
+			return currentValue == testValue
 		}
 
-		helper(
-			expression+"+"+strconv.Itoa(nums[index]),
-			index+1,
-			currentResult+nums[index],
-			nums[index],
-			nums,
-		)
+		// Try addition
+		if dfs(index+1, currentValue+numbers[index]) {
+			return true
+		}
 
-		helper(
-			expression+"*"+strconv.Itoa(nums[index]),
-			index+1,
-			currentResult-lastOperand+lastOperand*nums[index],
-			lastOperand*nums[index],
-			nums,
-		)
+		// Try multiplication
+		if dfs(index+1, currentValue*numbers[index]) {
+			return true
+		}
+
+		return false
 	}
 
-	helper(strconv.Itoa(nums[0]), 1, nums[0], nums[0], nums)
-
-	var rr []int
-	for _, r := range results {
-		rr = append(rr, r)
-	}
-
-	slices.Sort(rr)
-	return rr
+	return dfs(1, numbers[0])
 }
 
 type Puzzle struct {

@@ -125,32 +125,3 @@ func TestParse(t *testing.T) {
 		})
 	}
 }
-
-func TestEval(t *testing.T) {
-	type args struct {
-		nums []int
-	}
-	tests := []struct {
-		name string
-		args args
-		want []int
-	}{
-		{
-			name: "ok",
-			args: args{
-				nums: []int{11, 6, 16, 20},
-			},
-			want: []int{
-				53, 102, 127, 337, 386, 1076, 1931, 21120,
-			},
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := Eval(tt.args.nums); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Eval() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
