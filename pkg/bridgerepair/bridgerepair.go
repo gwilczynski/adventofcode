@@ -23,19 +23,16 @@ func isValid(testValue int, numbers []int) bool {
 		return false
 	}
 
-	// Recursive function to generate all combinations of + and * operators
 	var dfs func(index int, currentValue int) bool
 	dfs = func(index int, currentValue int) bool {
 		if index == n {
 			return currentValue == testValue
 		}
 
-		// Try addition
 		if dfs(index+1, currentValue+numbers[index]) {
 			return true
 		}
 
-		// Try multiplication
 		if dfs(index+1, currentValue*numbers[index]) {
 			return true
 		}
